@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 
 STATUS = (
     ('active', 'active'),
@@ -56,3 +57,14 @@ class Item(models.Model):
     category = models.ForeignKey(Category, on_delete= models.CASCADE)
     def __str__(self):
         return self.title
+    def get_item_url(self):
+        return reverse("home:products", kwargs = {'slog':self.slog})
+
+class Feedback(models.Model):
+    image = models.ImageField()
+    name = models.CharField(max_length= 200)
+    profession = models.CharField(max_length= 100)
+    discription = models.TextField()
+    status = models.CharField(max_length=200, choices=STATUS, blank= True)
+    def __str__(self):
+        return self.name

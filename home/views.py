@@ -18,7 +18,7 @@ class HomeView(BaseView):
         self.views['newitems'] = Item.objects.filter(label='new')
         self.views['sales'] = Item.objects.filter(label='sale')
         self.views['defaults'] = Item.objects.filter(label='')
-
+        self.views['brands'] = Brand.objects.filter(status= 'active')
         self.views['ads'] = Ad.objects.all()
         # self.views['ads2'] = Ad.objects.filter(rank= 2)
         # self.views['ads3'] = Ad.objects.filter(rank= 3)
@@ -27,18 +27,25 @@ class HomeView(BaseView):
         # self.views['ads6'] = Ad.objects.filter(rank= 6)
         # self.views['ads7'] = Ad.objects.filter(rank= 7)
         # self.views['ads8'] = Ad.objects.filter(rank= 8)
+        self.views['feedbacks'] = Feedback.objects.filter(status= 'active')
 
         return render(request, 'index.html', self.views)
 
 
 class ProductsView(BaseView):
     def get(self, request):
-        return render(request, 'product-list.html')
+        self.views['items'] = Item.objects.filter(status='active')
+        self.views['brands'] = Brand.objects.filter(status='active')
+        return render(request, 'product-list.html', self.views)
 
 
 class Product_detailView(BaseView):
-    def get(self, request):
-        return render(request, 'product-detail.html')
+    def get(self, request, slog):
+        self.views['item_detail'] = Item.objects.filter(slog = slog)
+
+        cat = Item.objects.get(slog = slog).category_id
+        self.views['cat_items'] = Item.objects.filter(category = cat)
+        return render(request, 'product-detail.html', self.views)
 
 
 class CartView(BaseView):
@@ -51,11 +58,11 @@ class CheckoutView(BaseView):
         return render(request, 'checkout.html')
 
 
-class Product_detailView(BaseView):
+class AccountView(BaseView):
     def get(self, request):
-        return render(request, 'product-detail.html')
+        return render(request, 'my-account.html')
 
 
-class Product_detailView(BaseView):
-    def get(self, request):
-        return render(request, 'product-detail.html')
+# class Product_detailView(BaseView):
+#     def get(self, request):
+#         return render(request, 'product-detail.html')
