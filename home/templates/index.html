@@ -11,7 +11,7 @@
                             <ul class="navbar-nav">
                                 {% for cat in categories %}
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#"><i class="fa fa-{{cat.image}}"></i>{{cat.name}}</a>
+                                    <a class="nav-link" href="{{cat.get_cat_url}}"><i class="fa fa-{{cat.image}}"></i>{{cat.name}}</a>
                                 </li>
                                 {% endfor %}
                             </ul>
@@ -227,12 +227,8 @@
                                 </div>
                             </div>
                             <div class="product-price">
-                                {% if hotitem.discounted_price > 0%}
-                                <h3><span>Rs.</span>{{hotitem.discounted_price}}</h3>
-                                {% else %}
                                 <h3><span>Rs.</span>{{hotitem.price}}</h3>
-                                {% endif %}
-                                <a class="btn" href=""><i class="fa fa-shopping-cart"></i>Buy Now</a>
+                                <a class="btn" href="{{hotitem.get_item_url}}"><i class="fa fa-shopping-cart"></i>Buy Now</a>
                             </div>
                         </div>
                     </div>
@@ -296,7 +292,7 @@
                                 {% else %}
                                 <h3><span>RS.</span>{{newitem.price}}</h3>
                                 {% endif %}
-                                <a class="btn" href=""><i class="fa fa-shopping-cart"></i>Buy Now</a>
+                                <a class="btn" href="{{newitem.get_item_url}}"><i class="fa fa-shopping-cart"></i>Buy Now</a>
                             </div>
                         </div>
                     </div>
