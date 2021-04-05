@@ -62,7 +62,7 @@ class Item(models.Model):
     discription = models.TextField(blank= True)
     specification = models.TextField(blank= True)
     def __str__(self):
-        return self.title
+        return self.name
     def get_item_url(self):
         return reverse("home:products", kwargs = {'slog':self.slog})
 
@@ -72,5 +72,14 @@ class Feedback(models.Model):
     profession = models.CharField(max_length= 100)
     discription = models.TextField()
     status = models.CharField(max_length=200, choices=STATUS, blank= True)
+    def __str__(self):
+        return self.name
+
+
+class Contact(models.Model):
+    name = models.CharField(max_length= 200)
+    email = models.EmailField(max_length= 200, blank= True)
+    subject = models.CharField(max_length= 500, blank= True)
+    message = models.TextField()
     def __str__(self):
         return self.name

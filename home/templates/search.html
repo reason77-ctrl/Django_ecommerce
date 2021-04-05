@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-        
+
         <!-- Breadcrumb Start -->
         <div class="breadcrumb-wrap">
             <div class="container-fluid">
@@ -13,7 +13,7 @@
             </div>
         </div>
         <!-- Breadcrumb End -->
-        
+
         <!-- Product List Start -->
         <div class="product-view">
             <div class="container-fluid">
@@ -63,7 +63,7 @@
                                     </div>
                                 </div>
                             </div>
-                            {% for item in cat_detail %}
+                            {% for item in search_product %}
                             <div class="col-md-4">
                                 <div class="product-item">
                                     <div class="product-title">
@@ -318,7 +318,7 @@
 <!--                                </div>-->
 <!--                            </div>-->
                         </div>
-                        
+
                         <!-- Pagination Start -->
                         <div class="col-md-12">
                             <nav aria-label="Page navigation example">
@@ -336,41 +336,38 @@
                             </nav>
                         </div>
                         <!-- Pagination Start -->
-                    </div>           
-                    
+                    </div>
+
                     <!-- Side Bar Start -->
                     <div class="col-lg-4 sidebar">
                         <div class="sidebar-widget category">
                             <h2 class="title">Category</h2>
                             <nav class="navbar bg-light">
                                 <ul class="navbar-nav">
-                                    {% for cat in categories %}
                                     <li class="nav-item">
-                                        <a class="nav-link" href="{{cat.get_cat_url}}"><i class="fa fa-{{cat.image}}"></i>{{cat.name}}</a>
+                                        <a class="nav-link" href="#"><i class="fa fa-female"></i>Fashion & Beauty</a>
                                     </li>
-                                    {% endfor %}
-<!--                                    <li class="nav-item">-->
-<!--                                        <a class="nav-link" href="#"><i class="fa fa-child"></i>Kids & Babies Clothes</a>-->
-<!--                                    </li>-->
-<!--                                    <li class="nav-item">-->
-<!--                                        <a class="nav-link" href="#"><i class="fa fa-tshirt"></i>Men & Women Clothes</a>-->
-<!--                                    </li>-->
-<!--                                    <li class="nav-item">-->
-<!--                                        <a class="nav-link" href="#"><i class="fa fa-mobile-alt"></i>Gadgets & Accessories</a>-->
-<!--                                    </li>-->
-<!--                                    <li class="nav-item">-->
-<!--                                        <a class="nav-link" href="#"><i class="fa fa-microchip"></i>Electronics & Accessories</a>-->
-<!--                                    </li>-->
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#"><i class="fa fa-child"></i>Kids & Babies Clothes</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#"><i class="fa fa-tshirt"></i>Men & Women Clothes</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#"><i class="fa fa-mobile-alt"></i>Gadgets & Accessories</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#"><i class="fa fa-microchip"></i>Electronics & Accessories</a>
+                                    </li>
                                 </ul>
                             </nav>
                         </div>
-                        
+
                         <div class="sidebar-widget widget-slider">
                             <div class="sidebar-slider normal-slider">
-                                {% for item in hotitems %}
                                 <div class="product-item">
                                     <div class="product-title">
-                                        <a href="{{item.get_item_url}}">{{item.name}}</a>
+                                        <a href="#">Product Name</a>
                                         <div class="ratting">
                                             <i class="fa fa-star"></i>
                                             <i class="fa fa-star"></i>
@@ -381,7 +378,7 @@
                                     </div>
                                     <div class="product-image">
                                         <a href="product-detail.html">
-                                            <img src="{{item.image.url}}" alt="Product Image">
+                                            <img src="img/product-10.jpg" alt="Product Image">
                                         </a>
                                         <div class="product-action">
                                             <a href="#"><i class="fa fa-cart-plus"></i></a>
@@ -390,66 +387,65 @@
                                         </div>
                                     </div>
                                     <div class="product-price">
-                                        <h3><span>Rs.</span>{{item.discounted_price}}</h3>
-                                        <a class="btn" href="{{item.get_item_url}}"><i class="fa fa-shopping-cart"></i>Buy Now</a>
+                                        <h3><span>$</span>99</h3>
+                                        <a class="btn" href=""><i class="fa fa-shopping-cart"></i>Buy Now</a>
                                     </div>
                                 </div>
-                                {% endfor %}
-<!--                                <div class="product-item">-->
-<!--                                    <div class="product-title">-->
-<!--                                        <a href="#">Product Name</a>-->
-<!--                                        <div class="ratting">-->
-<!--                                            <i class="fa fa-star"></i>-->
-<!--                                            <i class="fa fa-star"></i>-->
-<!--                                            <i class="fa fa-star"></i>-->
-<!--                                            <i class="fa fa-star"></i>-->
-<!--                                            <i class="fa fa-star"></i>-->
-<!--                                        </div>-->
-<!--                                    </div>-->
-<!--                                    <div class="product-image">-->
-<!--                                        <a href="product-detail.html">-->
-<!--                                            <img src="img/product-9.jpg" alt="Product Image">-->
-<!--                                        </a>-->
-<!--                                        <div class="product-action">-->
-<!--                                            <a href="#"><i class="fa fa-cart-plus"></i></a>-->
-<!--                                            <a href="#"><i class="fa fa-heart"></i></a>-->
-<!--                                            <a href="#"><i class="fa fa-search"></i></a>-->
-<!--                                        </div>-->
-<!--                                    </div>-->
-<!--                                    <div class="product-price">-->
-<!--                                        <h3><span>$</span>99</h3>-->
-<!--                                        <a class="btn" href=""><i class="fa fa-shopping-cart"></i>Buy Now</a>-->
-<!--                                    </div>-->
-<!--                                </div>-->
-<!--                                <div class="product-item">-->
-<!--                                    <div class="product-title">-->
-<!--                                        <a href="#">Product Name</a>-->
-<!--                                        <div class="ratting">-->
-<!--                                            <i class="fa fa-star"></i>-->
-<!--                                            <i class="fa fa-star"></i>-->
-<!--                                            <i class="fa fa-star"></i>-->
-<!--                                            <i class="fa fa-star"></i>-->
-<!--                                            <i class="fa fa-star"></i>-->
-<!--                                        </div>-->
-<!--                                    </div>-->
-<!--                                    <div class="product-image">-->
-<!--                                        <a href="product-detail.html">-->
-<!--                                            <img src="img/product-8.jpg" alt="Product Image">-->
-<!--                                        </a>-->
-<!--                                        <div class="product-action">-->
-<!--                                            <a href="#"><i class="fa fa-cart-plus"></i></a>-->
-<!--                                            <a href="#"><i class="fa fa-heart"></i></a>-->
-<!--                                            <a href="#"><i class="fa fa-search"></i></a>-->
-<!--                                        </div>-->
-<!--                                    </div>-->
-<!--                                    <div class="product-price">-->
-<!--                                        <h3><span>$</span>99</h3>-->
-<!--                                        <a class="btn" href=""><i class="fa fa-shopping-cart"></i>Buy Now</a>-->
-<!--                                    </div>-->
-<!--                                </div>-->
+                                <div class="product-item">
+                                    <div class="product-title">
+                                        <a href="#">Product Name</a>
+                                        <div class="ratting">
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                        </div>
+                                    </div>
+                                    <div class="product-image">
+                                        <a href="product-detail.html">
+                                            <img src="img/product-9.jpg" alt="Product Image">
+                                        </a>
+                                        <div class="product-action">
+                                            <a href="#"><i class="fa fa-cart-plus"></i></a>
+                                            <a href="#"><i class="fa fa-heart"></i></a>
+                                            <a href="#"><i class="fa fa-search"></i></a>
+                                        </div>
+                                    </div>
+                                    <div class="product-price">
+                                        <h3><span>$</span>99</h3>
+                                        <a class="btn" href=""><i class="fa fa-shopping-cart"></i>Buy Now</a>
+                                    </div>
+                                </div>
+                                <div class="product-item">
+                                    <div class="product-title">
+                                        <a href="#">Product Name</a>
+                                        <div class="ratting">
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                        </div>
+                                    </div>
+                                    <div class="product-image">
+                                        <a href="product-detail.html">
+                                            <img src="img/product-8.jpg" alt="Product Image">
+                                        </a>
+                                        <div class="product-action">
+                                            <a href="#"><i class="fa fa-cart-plus"></i></a>
+                                            <a href="#"><i class="fa fa-heart"></i></a>
+                                            <a href="#"><i class="fa fa-search"></i></a>
+                                        </div>
+                                    </div>
+                                    <div class="product-price">
+                                        <h3><span>$</span>99</h3>
+                                        <a class="btn" href=""><i class="fa fa-shopping-cart"></i>Buy Now</a>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        
+
                         <div class="sidebar-widget brands">
                             <h2 class="title">Our Brands</h2>
                             <ul>
@@ -461,7 +457,7 @@
                                 <li><a href="#">Sagittis</a><span>(28)</span></li>
                             </ul>
                         </div>
-                        
+
                         <div class="sidebar-widget tag">
                             <h2 class="title">Tags Cloud</h2>
                             <a href="#">Lorem ipsum</a>
@@ -482,8 +478,8 @@
                 </div>
             </div>
         </div>
-        <!-- Product List End -->  
-        
+        <!-- Product List End -->
+
         <!-- Brand Start -->
         <div class="brand">
             <div class="container-fluid">
