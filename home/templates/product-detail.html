@@ -118,48 +118,46 @@
                                         </ul>
                                     </div>
                                     <div id="reviews" class="container tab-pane fade">
+                                        {% for review in reviews %}
                                         <div class="reviews-submitted">
-                                            <div class="reviewer">Phasellus Gravida - <span>01 Jan 2020</span></div>
+                                            <div class="reviewer">{{review.username}} - <span>{{review.date}}</span></div>
+                                            <h6>{{review.email}}</h6>
                                             <div class="ratting">
+                                                {% for i in x|ljust:review.rating %}
                                                 <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
+                                                {% endfor %}
                                             </div>
                                             <p>
-                                                Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.
+                                               {{review.review}}
                                             </p>
                                         </div>
+                                        {% endfor %}
                                         <div class="reviews-submit">
-                                            <h4>Give your Review:</h4>
-                                            <div class="ratting">
-                                                <i class="far fa-star"></i>
-                                                <i class="far fa-star"></i>
-                                                <i class="far fa-star"></i>
-                                                <i class="far fa-star"></i>
-                                                <i class="far fa-star"></i>
-                                            </div>
-                                            <div class="row form">
-                                                <div class="col-sm-6">
-                                                    <input type="text" placeholder="Name">
+                                            <form method="POST" action="{% url 'home:review' %}">
+                                                {% csrf_token %}
+                                                {% if user.is_authenticated %}
+                                                <div class="row form">
+                                                    <div class="col-sm-6">
+                                                        <input name="rating" type="number" placeholder="Rating">
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        <input name="slog" type="hidden" value="{{product.slog}}" placeholder="slog">
+                                                    </div>
+                                                    <div class="col-sm-12">
+                                                        <textarea name="review" placeholder="Review"></textarea>
+                                                    </div>
+                                                    <div class="col-sm-12">
+                                                        <button type="submit">Submit</button>
+                                                    </div>
                                                 </div>
-                                                <div class="col-sm-6">
-                                                    <input type="email" placeholder="Email">
-                                                </div>
-                                                <div class="col-sm-12">
-                                                    <textarea placeholder="Review"></textarea>
-                                                </div>
-                                                <div class="col-sm-12">
-                                                    <button>Submit</button>
-                                                </div>
-                                            </div>
+                                                {% endif %}
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            {% endfor %}
                         </div>
+                        {% endfor %}
 
                         <div class="product">
                             <div class="section-header">

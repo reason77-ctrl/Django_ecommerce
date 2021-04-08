@@ -1,6 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.generic.base import View
 from .models import *
+from django.contrib.auth.models import User
+from django.contrib import messages
 
 
 # Create your views here.
@@ -26,6 +28,23 @@ class HomeView(BaseView):
 
         return render(request, 'index.html', self.views)
 
+def review_item(request):
+    if request.method == "POST":
+        rating = request.POST['rating']
+        review = request.POST['review']
+        slog = request.POST['slog']
+        username = request.user.username
+        email = request.user.email
+        user_review = Review.objects.create(
+            rating = rating,
+            review = review,
+            username = username,
+            email = email,
+            slog = slog
+        )
+        user_review.save()
+        return redirect(f'/products/{slog}')
+
 
 class CategoryView(BaseView):
     def get(self, request, slog):
@@ -39,6 +58,7 @@ class Product_detailView(BaseView):
     def get(self, request, slog):
         self.views['item_detail'] = Item.objects.filter(slog = slog)
         self.views['brand'] = Brand.objects.filter(status= 'active')
+        self.views['reviews'] = Review.objects.filter(status= 'active')
         self.views['count'] = []
         for i in self.views['brand']:
             count_food = Item.objects.filter(brand = i.id).count()
@@ -83,6 +103,41 @@ def contact(request):
         views["message"] = "The Form is Submitted."
         return render(request, 'contact.html',views)
     return render(request, 'contact.html')
+
+def signup(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        email = request.POST['email']
+        password = request.POST['password']
+        cpassword = request.POST['cpassword']
+        fname = request.POST['fname']
+        lname = request.POST['lname']
+        if password == cpassword:
+            if User.objects.filter(username = username).exists():
+                messages.error(request, 'This username is already taken')
+                return redirect('home:signup')
+
+            elif User.objects.filter(email = email).exists():
+                messages.error(request, 'This email is already taken')
+                return redirect('home:account')
+
+            else:
+                user = User.objects.create_user(
+                    username = username,
+                    email = email,
+                    password = password,
+                    first_name = fname,
+                    last_name = lname
+                )
+                user.save()
+                messages.success(request, 'You are registered.')
+                return redirect('home:account')
+
+        else:
+            messages.error(request, 'The password did not match.')
+            return redirect('home:account')
+    return render(request, 'signup.html')
+
 
 class CartView(BaseView):
     def get(self, request):

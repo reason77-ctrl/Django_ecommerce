@@ -83,3 +83,15 @@ class Contact(models.Model):
     message = models.TextField()
     def __str__(self):
         return self.name
+
+class Review(models.Model):
+    username = models.CharField(max_length= 250, blank= True)
+    date = models.DateField(auto_now_add= True)
+    email = models.EmailField(max_length= 250, blank=True)
+    review = models.TextField(blank= True)
+    rating = models.IntegerField()
+    slog = models.CharField(max_length= 200, blank= True)
+    status = models.CharField(choices= STATUS,max_length= 200, default= 'active')
+
+    def __str__(self):
+        return self.username

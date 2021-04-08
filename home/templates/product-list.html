@@ -453,12 +453,14 @@
                         <div class="sidebar-widget brands">
                             <h2 class="title">Our Brands</h2>
                             <ul>
-                                <li><a href="#">Nulla </a><span>(45)</span></li>
-                                <li><a href="#">Curabitur </a><span>(34)</span></li>
-                                <li><a href="#">Nunc </a><span>(67)</span></li>
-                                <li><a href="#">Ullamcorper</a><span>(74)</span></li>
-                                <li><a href="#">Fusce </a><span>(89)</span></li>
-                                <li><a href="#">Sagittis</a><span>(28)</span></li>
+                                {% for bran in count %}
+                                <li><a href="#">{{bran.name}} </a><span>{{bran.count}}</span></li>
+                                {% endfor %}
+<!--                                <li><a href="#">Curabitur </a><span>(34)</span></li>-->
+<!--                                <li><a href="#">Nunc </a><span>(67)</span></li>-->
+<!--                                <li><a href="#">Ullamcorper</a><span>(74)</span></li>-->
+<!--                                <li><a href="#">Fusce </a><span>(89)</span></li>-->
+<!--                                <li><a href="#">Sagittis</a><span>(28)</span></li>-->
                             </ul>
                         </div>
                         
@@ -488,12 +490,14 @@
         <div class="brand">
             <div class="container-fluid">
                 <div class="brand-slider">
-                    <div class="brand-item"><img src="img/brand-1.png" alt=""></div>
-                    <div class="brand-item"><img src="img/brand-2.png" alt=""></div>
-                    <div class="brand-item"><img src="img/brand-3.png" alt=""></div>
-                    <div class="brand-item"><img src="img/brand-4.png" alt=""></div>
-                    <div class="brand-item"><img src="img/brand-5.png" alt=""></div>
-                    <div class="brand-item"><img src="img/brand-6.png" alt=""></div>
+                    {% for brand in brands %}
+                    <div class="brand-item"><img src="{{brand.image.url}}" alt=""></div>
+                    {% endfor %}
+<!--                    <div class="brand-item"><img src="img/brand-2.png" alt=""></div>-->
+<!--                    <div class="brand-item"><img src="img/brand-3.png" alt=""></div>-->
+<!--                    <div class="brand-item"><img src="img/brand-4.png" alt=""></div>-->
+<!--                    <div class="brand-item"><img src="img/brand-5.png" alt=""></div>-->
+<!--                    <div class="brand-item"><img src="img/brand-6.png" alt=""></div>-->
                 </div>
             </div>
         </div>
