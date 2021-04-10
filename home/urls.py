@@ -9,9 +9,6 @@ urlpatterns = [
     path('contact', contact, name= 'contact'),
     path('account', signup, name = 'account'),
     path('review', review_item, name= 'review'),
-
-
-    path('cart', CartView.as_view(), name= 'cart'),
-    path('checkout', CheckoutView.as_view(), name= 'checkout'),
-    path('my-account', AccountView.as_view(), name= 'my-account'),
+    path('cart/<slog>', cart, name='cart'),
+    path('my_cart', CartView.as_view(), name= 'my_cart'),
 ]

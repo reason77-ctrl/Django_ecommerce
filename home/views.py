@@ -58,7 +58,7 @@ class Product_detailView(BaseView):
     def get(self, request, slog):
         self.views['item_detail'] = Item.objects.filter(slog = slog)
         self.views['brand'] = Brand.objects.filter(status= 'active')
-        self.views['reviews'] = Review.objects.filter(status= 'active')
+        self.views['reviews'] = Review.objects.filter(slog=slog,status= 'active')
         self.views['count'] = []
         for i in self.views['brand']:
             count_food = Item.objects.filter(brand = i.id).count()
@@ -139,19 +139,34 @@ def signup(request):
     return render(request, 'signup.html')
 
 
+def cart(request,slog):
+    user = request.user.username
+    if Cart.objects.filter(slog = slog).exists():
+        quantity = Cart.objects.get(username = user, slog = slog, checkout = False).quantity
+        qty = quantity + 1
+        Cart.objects.filter(username=user, slog=slog, checkout=False).update(quantity= qty)
+        return redirect('home:my_cart')
+    else:
+        data = Cart.objects.create(
+            username = user,
+            slog = slog,
+            quantity = 1,
+            items = Item.objects.filter(slog= slog)[0]
+        )
+        data.save()
+        return redirect('home:my_cart')
+
+
 class CartView(BaseView):
     def get(self, request):
-        return render(request, 'cart.html')
-
-
-class CheckoutView(BaseView):
-    def get(self, request):
-        return render(request, 'checkout.html')
-
-
-class AccountView(BaseView):
-    def get(self, request):
-        return render(request, 'my-account.html')
+        user = request.user.username
+        self.views['cart_product']= Cart.objects.filter(username= user, checkout= False)
+        return render(request, 'cart.html', self.views)
+#
+#
+# class AccountView(BaseView):
+#     def get(self, request):
+#         return render(request, 'my-account.html')
 
 
 # class Product_detailView(BaseView):

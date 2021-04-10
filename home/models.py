@@ -65,6 +65,8 @@ class Item(models.Model):
         return self.name
     def get_item_url(self):
         return reverse("home:products", kwargs = {'slog':self.slog})
+    def get_cart_url(self):
+        return reverse("home:cart", kwargs = {'slog':self.slog})
 
 class Feedback(models.Model):
     image = models.ImageField()
@@ -92,6 +94,16 @@ class Review(models.Model):
     rating = models.IntegerField()
     slog = models.CharField(max_length= 200, blank= True)
     status = models.CharField(choices= STATUS,max_length= 200, default= 'active')
+
+    def __str__(self):
+        return self.username
+
+class Cart(models.Model):
+    username = models.CharField(max_length=300)
+    slog = models.CharField(max_length=300)
+    items = models.ForeignKey(Item, on_delete=models.CASCADE)
+    quantity = models.IntegerField()
+    checkout = models.BooleanField(default=False)
 
     def __str__(self):
         return self.username

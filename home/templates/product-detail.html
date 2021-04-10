@@ -82,7 +82,7 @@
                                             </div> 
                                         </div>
                                         <div class="action">
-                                            <a class="btn" href="#"><i class="fa fa-shopping-cart"></i>Add to Cart</a>
+                                            <a class="btn" href="{{product.get_cart_url}}"><i class="fa fa-shopping-cart"></i>Add to Cart</a>
                                             <a class="btn" href="#"><i class="fa fa-shopping-bag"></i>Buy Now</a>
                                         </div>
                                     </div>
@@ -123,7 +123,7 @@
                                             <div class="reviewer">{{review.username}} - <span>{{review.date}}</span></div>
                                             <h6>{{review.email}}</h6>
                                             <div class="ratting">
-                                                {% for i in x|ljust:review.rating %}
+                                                {% for i in "x"|ljust:review.rating %}
                                                 <i class="fa fa-star"></i>
                                                 {% endfor %}
                                             </div>
@@ -317,6 +317,9 @@
                             <h2 class="title">Category</h2>
                             <nav class="navbar bg-light">
                                 <ul class="navbar-nav">
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="/"><i class="fa fa-home"></i>Home</a>
+                                    </li>
                                     {% for cat in categories %}
                                     <li class="nav-item">
                                         <a class="nav-link" href="{{cat.get_cat_url}}"><i class="fa fa-{{cat.image}}"></i>{{cat.name}}<span style="float:right;">{{cat.count_cat}}</span></a>
