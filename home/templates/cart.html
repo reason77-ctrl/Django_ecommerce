@@ -40,16 +40,16 @@
                                                     <p>{{carts.items.name}}</p>
                                                 </div>
                                             </td>
-                                            <td>{{carts.items.discounted_price}}</td>
+                                            <td>Rs.{{carts.items.discounted_price}}</td>
                                             <td>
                                                 <div class="qty">
-                                                    <button class="btn-minus"><i class="fa fa-minus"></i></button>
+                                                    <a href="delete_single_cart/{{carts.items.slug}}"><button class="btn-minus"><i class="fa fa-minus"></i></button></a>
                                                     <input type="text" value="{{carts.quantity}}">
-                                                    <button class="btn-plus"><i class="fa fa-plus"></i></button>
+                                                    <a href="{{carts.items.get_cart_url}}"><button class="btn-plus"><i class="fa fa-plus"></i></button></a>
                                                 </div>
                                             </td>
-                                            <td>$99</td>
-                                            <td><button><i class="fa fa-trash"></i></button></td>
+                                            <td>Rs.{{carts.total}}</td>
+                                            <td><a href="delete_cart/{{carts.items.slug}}"><button><i class="fa fa-trash"></i></button></a></td>
                                         </tr>
                                         {% endfor %}
 <!--                                        <tr>-->

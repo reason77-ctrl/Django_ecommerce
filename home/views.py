@@ -32,7 +32,7 @@ def review_item(request):
     if request.method == "POST":
         rating = request.POST['rating']
         review = request.POST['review']
-        slog = request.POST['slog']
+        slug = request.POST['slug']
         username = request.user.username
         email = request.user.email
         user_review = Review.objects.create(
@@ -40,25 +40,25 @@ def review_item(request):
             review = review,
             username = username,
             email = email,
-            slog = slog
+            slug = slug
         )
         user_review.save()
-        return redirect(f'/products/{slog}')
+        return redirect(f'/products/{slug}')
 
 
 class CategoryView(BaseView):
-    def get(self, request, slog):
-        cat_id = Category.objects.get(slog = slog).id
+    def get(self, request, slug):
+        cat_id = Category.objects.get(slug = slug).id
         self.views['cat_detail'] = Item.objects.filter(category= cat_id)
 
         return render(request, 'product-list.html', self.views)
 
 
 class Product_detailView(BaseView):
-    def get(self, request, slog):
-        self.views['item_detail'] = Item.objects.filter(slog = slog)
+    def get(self, request, slug):
+        self.views['item_detail'] = Item.objects.filter(slug = slug)
         self.views['brand'] = Brand.objects.filter(status= 'active')
-        self.views['reviews'] = Review.objects.filter(slog=slog,status= 'active')
+        self.views['reviews'] = Review.objects.filter(slug=slug,status= 'active')
         self.views['count'] = []
         for i in self.views['brand']:
             count_food = Item.objects.filter(brand = i.id).count()
@@ -72,7 +72,7 @@ class Product_detailView(BaseView):
             dd = {'name':i.name, 'image':i.image,'count_cat':count_food}
             self.views['count_cat'].append(dd)
 
-        cat = Item.objects.get(slog = slog).category_id
+        cat = Item.objects.get(slug = slug).category_id
         self.views['cat_items'] = Item.objects.filter(category = cat)
         return render(request, 'product-detail.html', self.views)
 
@@ -139,19 +139,30 @@ def signup(request):
     return render(request, 'signup.html')
 
 
-def cart(request,slog):
+def cart(request,slug):
     user = request.user.username
-    if Cart.objects.filter(slog = slog).exists():
-        quantity = Cart.objects.get(username = user, slog = slog, checkout = False).quantity
+    price = Item.objects.get(slug=slug).price
+    discounted_price = Item.objects.get(slug=slug).discounted_price
+    if Cart.objects.filter(slug = slug).exists():
+        quantity = Cart.objects.get(username = user, slug = slug, checkout = False).quantity
         qty = quantity + 1
-        Cart.objects.filter(username=user, slog=slog, checkout=False).update(quantity= qty)
+        if discounted_price > 0:
+            actual_total = discounted_price * qty
+        else:
+            actual_total = price * qty
+        Cart.objects.filter(username=user, slug=slug, checkout=False).update(quantity= qty,total=actual_total)
         return redirect('home:my_cart')
     else:
+        if discounted_price > 0:
+            actual_total = discounted_price
+        else:
+            actual_total = price
         data = Cart.objects.create(
             username = user,
-            slog = slog,
+            slug = slug,
             quantity = 1,
-            items = Item.objects.filter(slog= slog)[0]
+            total = actual_total,
+            items = Item.objects.filter(slug= slug)[0]
         )
         data.save()
         return redirect('home:my_cart')
@@ -162,13 +173,50 @@ class CartView(BaseView):
         user = request.user.username
         self.views['cart_product']= Cart.objects.filter(username= user, checkout= False)
         return render(request, 'cart.html', self.views)
-#
-#
-# class AccountView(BaseView):
-#     def get(self, request):
-#         return render(request, 'my-account.html')
+
+def delete_cart(request,slug):
+    if Cart.objects.filter(slug = slug).exists():
+        username = request.user.username
+        Cart.objects.filter(username=username, slug=slug, checkout=False).delete()
+    return redirect('home:my_cart')
 
 
-# class Product_detailView(BaseView):
-#     def get(self, request):
-#         return render(request, 'product-detail.html')
+def delete_single_cart(request,slug):
+    if Cart.objects.filter(slug = slug).exists():
+        username = request.user.username
+        price = Item.objects.get(slug=slug).price
+        discounted_price = Item.objects.get(slug=slug).discounted_price
+        quantity = Cart.objects.get(username = username, slug = slug, checkout = False).quantity
+        qty = quantity - 1
+        if discounted_price > 0:
+            actual_total = discounted_price * qty
+        else:
+            actual_total = price * qty
+        Cart.objects.filter(username=username, slug=slug, checkout=False).update(quantity= qty, total= actual_total)
+    return redirect('home:my_cart')
+
+
+# ------------------------------------------------API----------------------------------------------------
+from rest_framework import viewsets
+from .serializers import *
+from django.contrib.auth.models import User
+from .serializers import ItemSerializer
+from rest_framework import generics
+from rest_framework.filters import OrderingFilter,SearchFilter
+from django_filters.rest_framework import DjangoFilterBackend
+
+# ViewSets define the view behavior.
+
+class ItemViewSet(viewsets.ModelViewSet):
+    queryset = Item.objects.all()
+    serializer_class = ItemSerializer
+
+
+
+class ItemListView(generics.ListAPIView):
+    queryset = Item.objects.all()
+    serializer_class = ItemSerializer
+    filter_backends = [DjangoFilterBackend,OrderingFilter,SearchFilter]
+    filter_fields = ["id", "category", "label", "brand"]
+    ordering_field = ["id", "price", "name"]
+    search_fields = ["name","discription"]

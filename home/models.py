@@ -16,13 +16,13 @@ LABEL = (
 class Category(models.Model):
     name = models.CharField(max_length= 200)
     image = models.CharField(max_length= 200)
-    slog = models.CharField(max_length= 100, unique= True)
+    slug = models.CharField(max_length= 100, unique= True)
     status = models.CharField(choices= STATUS, max_length= 200)
     def __str__(self):
         return self.name
 
     def get_cat_url(self):
-        return reverse("home:category", kwargs = {'slog':self.slog})
+        return reverse("home:category", kwargs = {'slug':self.slug})
 
 class Slider(models.Model):
     name = models.CharField(max_length= 300)
@@ -56,7 +56,7 @@ class Item(models.Model):
     label = models.CharField(choices= LABEL, max_length= 200)
     image = models.ImageField(upload_to= 'media')
     status = models.CharField(max_length= 200, choices= STATUS)
-    slog = models.CharField(max_length= 200, unique= True)
+    slug = models.CharField(max_length= 200, unique= True)
     category = models.ForeignKey(Category, on_delete= models.CASCADE)
     brand = models.ForeignKey(Brand, on_delete= models.CASCADE, null= True)
     discription = models.TextField(blank= True)
@@ -64,9 +64,9 @@ class Item(models.Model):
     def __str__(self):
         return self.name
     def get_item_url(self):
-        return reverse("home:products", kwargs = {'slog':self.slog})
+        return reverse("home:products", kwargs = {'slug':self.slug})
     def get_cart_url(self):
-        return reverse("home:cart", kwargs = {'slog':self.slog})
+        return reverse("home:cart", kwargs = {'slug':self.slug})
 
 class Feedback(models.Model):
     image = models.ImageField()
@@ -92,7 +92,7 @@ class Review(models.Model):
     email = models.EmailField(max_length= 250, blank=True)
     review = models.TextField(blank= True)
     rating = models.IntegerField()
-    slog = models.CharField(max_length= 200, blank= True)
+    slug = models.CharField(max_length= 200, blank= True)
     status = models.CharField(choices= STATUS,max_length= 200, default= 'active')
 
     def __str__(self):
@@ -100,10 +100,25 @@ class Review(models.Model):
 
 class Cart(models.Model):
     username = models.CharField(max_length=300)
-    slog = models.CharField(max_length=300)
+    slug = models.CharField(max_length=300)
     items = models.ForeignKey(Item, on_delete=models.CASCADE)
-    quantity = models.IntegerField()
+    quantity = models.IntegerField(default=1)
+    total = models.IntegerField(default=0)
     checkout = models.BooleanField(default=False)
 
     def __str__(self):
         return self.username
+
+
+class Checkout(models.Model):
+    pass
+    fname = models.CharField(max_length=200)
+    lname = models.CharField(max_length=200)
+    email = models.EmailField(max_length=250)
+    phone = models.CharField(max_length=200)
+    address = models.CharField(max_length=300)
+    country = models.CharField(max_length=200)
+    city = models.CharField(max_length=200)
+
+    def __str__(self):
+        pass
