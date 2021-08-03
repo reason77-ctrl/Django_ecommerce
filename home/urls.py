@@ -11,6 +11,10 @@ urlpatterns = [
     path('review', review_item, name= 'review'),
     path('cart/<slug>', cart, name='cart'),
     path('my_cart', CartView.as_view(), name= 'my_cart'),
+    # path('cart_total/<slug>', cart_total, name='cart_total'),
     path('delete_cart/<slug>', delete_cart, name= 'delete_cart'),
     path('delete_single_cart/<slug>', delete_single_cart, name= 'delete_single_cart'),
+    path('checkout', checkout, name='checkout'),
+    path('checkouts', CheckoutView.as_view(), name= 'checkouts'),
+    
 ]

@@ -1,5 +1,7 @@
 from django.db import models
 from django.urls import reverse
+from django.core.validators import MinValueValidator
+
 
 STATUS = (
     ('active', 'active'),
@@ -101,24 +103,26 @@ class Review(models.Model):
 class Cart(models.Model):
     username = models.CharField(max_length=300)
     slug = models.CharField(max_length=300)
-    items = models.ForeignKey(Item, on_delete=models.CASCADE)
-    quantity = models.IntegerField(default=1)
+    items = models.ForeignKey(Item, on_delete=models.CASCADE, blank=True)
+    quantity = models.IntegerField()
     total = models.IntegerField(default=0)
+    all_total = models.IntegerField(default=0)
     checkout = models.BooleanField(default=False)
+    # shipping_cost = models.PositiveIntegerField(default=100, validators=[MinValueValidator(0)], null=False)
 
     def __str__(self):
         return self.username
 
 
 class Checkout(models.Model):
-    pass
-    fname = models.CharField(max_length=200)
-    lname = models.CharField(max_length=200)
-    email = models.EmailField(max_length=250)
-    phone = models.CharField(max_length=200)
-    address = models.CharField(max_length=300)
-    country = models.CharField(max_length=200)
-    city = models.CharField(max_length=200)
+    username = models.CharField(max_length=300)
+    fname = models.CharField(max_length=200, blank=True)
+    lname = models.CharField(max_length=200,blank=True)
+    email = models.EmailField(max_length=300,blank=True)
+    mobile_no = models.CharField(max_length=50)
+    address = models.CharField(max_length=500, blank=True)
+    country = models.CharField(max_length=200, blank=True)
+    city = models.CharField(max_length=200, blank=True)
 
     def __str__(self):
-        pass
+        return self.username

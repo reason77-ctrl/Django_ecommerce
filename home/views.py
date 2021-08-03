@@ -146,10 +146,13 @@ def cart(request,slug):
     if Cart.objects.filter(slug = slug).exists():
         quantity = Cart.objects.get(username = user, slug = slug, checkout = False).quantity
         qty = quantity + 1
+        
         if discounted_price > 0:
             actual_total = discounted_price * qty
+           
         else:
             actual_total = price * qty
+        
         Cart.objects.filter(username=user, slug=slug, checkout=False).update(quantity= qty,total=actual_total)
         return redirect('home:my_cart')
     else:
@@ -165,14 +168,28 @@ def cart(request,slug):
             items = Item.objects.filter(slug= slug)[0]
         )
         data.save()
-        return redirect('home:my_cart')
+        return redirect('home:my_cart')       
 
 
 class CartView(BaseView):
     def get(self, request):
         user = request.user.username
-        self.views['cart_product']= Cart.objects.filter(username= user, checkout= False)
+        carts = Cart.objects.filter(username= user, checkout= False)
+        self.views['cart_product'] = carts
+        totals = 0
+        shipping_cost = 100
+        for each in carts:
+            totals += each.total
+        self.views['total_price'] = totals
+        if totals == 0:
+            shipping_cost = 0
+            self.views['grand_total'] = 0
+        else:
+            self.views['grand_total'] = totals + shipping_cost
+        self.views['shipping'] = shipping_cost
+        self.views['cart_count'] = Cart.objects.filter(username=user, checkout=False).count()
         return render(request, 'cart.html', self.views)
+
 
 def delete_cart(request,slug):
     if Cart.objects.filter(slug = slug).exists():
@@ -196,27 +213,73 @@ def delete_single_cart(request,slug):
     return redirect('home:my_cart')
 
 
-# ------------------------------------------------API----------------------------------------------------
-from rest_framework import viewsets
-from .serializers import *
-from django.contrib.auth.models import User
-from .serializers import ItemSerializer
-from rest_framework import generics
-from rest_framework.filters import OrderingFilter,SearchFilter
-from django_filters.rest_framework import DjangoFilterBackend
+def checkout(request):
+    if request.method == "POST":
+        username = request.user.username,
+        fname = request.POST['fname']
+        lname = request.POST['lname']
+        email = request.POST['email']
+        mobile_no = request.POST['mobile_no']
+        address = request.POST['address']
+        country = request.POST['country']
+        city = request.POST['city']
+        if fname and lname and email != "":
+            data = Checkout.objects.create(
+                username = username,
+                fname = fname,
+                lname = lname,
+                email = email,
+                mobile_no = mobile_no,
+                address = address,
+                country = country,
+                city = city,
+            )
+            data.save()
+            return redirect('/')
+        else:
+            messages.error(request, 'Field must not be empty')
+            return redirect('home:checkouts')
+    return redirect('home:checkouts')
 
-# ViewSets define the view behavior.
+class CheckoutView(BaseView):
+    def get(self, request):
+        user = request.user.username
+        carts = Cart.objects.filter(username= user, checkout= False)
+        self.views['cart_product'] = carts
+        totals = 0
+        shipping_cost = 100
+        for each in carts:
+            totals += each.total
+        self.views['total_price'] = totals
+        if totals == 0:
+            shipping_cost = 0
+            self.views['grand_total'] = 0
+        else:
+            self.views['grand_total'] = totals + shipping_cost
+        self.views['shipping'] = shipping_cost
+        return render(request, 'checkout.html', self.views)
 
-class ItemViewSet(viewsets.ModelViewSet):
-    queryset = Item.objects.all()
-    serializer_class = ItemSerializer
 
-
-
-class ItemListView(generics.ListAPIView):
-    queryset = Item.objects.all()
-    serializer_class = ItemSerializer
-    filter_backends = [DjangoFilterBackend,OrderingFilter,SearchFilter]
-    filter_fields = ["id", "category", "label", "brand"]
-    ordering_field = ["id", "price", "name"]
-    search_fields = ["name","discription"]
+# # ------------------------------------------------API----------------------------------------------------
+# from .serializers import *
+# from django.contrib.auth.models import User
+# from .serializers import ItemSerializer
+# from rest_framework import generics
+# from rest_framework.filters import OrderingFilter,SearchFilter
+# from django_filters.rest_framework import DjangoFilterBackend
+#
+# # ViewSets define the view behavior.
+#
+# class ItemViewSet(viewsets.ModelViewSet):
+#     queryset = Item.objects.all()
+#     serializer_class = ItemSerializer
+#
+#
+#
+# class ItemListView(generics.ListAPIView):
+#     queryset = Item.objects.all()
+#     serializer_class = ItemSerializer
+#     filter_backends = [DjangoFilterBackend,OrderingFilter,SearchFilter]
+#     filter_fields = ["id", "category", "label", "brand"]
+#     ordering_field = ["id", "price", "name"]
+#     search_fields = ["name","discription"]

@@ -19,124 +19,77 @@
             <div class="container-fluid"> 
                 <div class="row">
                     <div class="col-lg-8">
+                    
                         <div class="checkout-inner">
                             <div class="billing-address">
-                                <h2>Billing Address</h2>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <label>First Name</label>
-                                        <input class="form-control" type="text" placeholder="First Name">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label>Last Name"</label>
-                                        <input class="form-control" type="text" placeholder="Last Name">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label>E-mail</label>
-                                        <input class="form-control" type="text" placeholder="E-mail">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label>Mobile No</label>
-                                        <input class="form-control" type="text" placeholder="Mobile No">
-                                    </div>
-                                    <div class="col-md-12">
-                                        <label>Address</label>
-                                        <input class="form-control" type="text" placeholder="Address">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label>Country</label>
-                                        <select class="custom-select">
-                                            <option selected>United States</option>
-                                            <option>Afghanistan</option>
-                                            <option>Albania</option>
-                                            <option>Algeria</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label>City</label>
-                                        <input class="form-control" type="text" placeholder="City">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label>State</label>
-                                        <input class="form-control" type="text" placeholder="State">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label>ZIP Code</label>
-                                        <input class="form-control" type="text" placeholder="ZIP Code">
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="custom-control custom-checkbox">
-                                            <input type="checkbox" class="custom-control-input" id="newaccount">
-                                            <label class="custom-control-label" for="newaccount">Create an account</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="custom-control custom-checkbox">
-                                            <input type="checkbox" class="custom-control-input" id="shipto">
-                                            <label class="custom-control-label" for="shipto">Ship to different address</label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="shipping-address">
+                            {% for message in messages %}
+                            <center><font color="red">
+                                {{message}}
+                            </font></center>
+                            {% endfor %}
                                 <h2>Shipping Address</h2>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <label>First Name</label>
-                                        <input class="form-control" type="text" placeholder="First Name">
+                                <form method="POST" action="{% url 'home:checkout' %}">
+                                    {% csrf_token %}
+                                    {% if user.is_authenticated %}
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label>First Name:</label>
+                                            <input name="fname" class="form-control" type="text" placeholder="First Name">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label>Last Name:</label>
+                                            <input name="lname" class="form-control" type="text" placeholder="Last Name">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label>E-mail:</label>
+                                            <input name="email" class="form-control" type="email" placeholder="E-mail">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label>Mobile No:</label>
+                                            <input name="mobile_no" class="form-control" type="number" placeholder="Mobile No">
+                                        </div>
+                                        <div class="col-md-12">
+                                            <label>Address:</label>
+                                            <input name="address" class="form-control" type="text" placeholder="Address">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label>Country:</label>
+                                            <select name="country" class="custom-select">
+                                                <option selected>United States</option>
+                                                <option>Nepal</option>
+                                                <option>China</option>
+                                                <option>United Kingdom</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label>City:</label>
+                                            <input name="city" class="form-control" type="text" placeholder="City">
+                                        </div>
                                     </div>
-                                    <div class="col-md-6">
-                                        <label>Last Name"</label>
-                                        <input class="form-control" type="text" placeholder="Last Name">
+                                    <hr>
+                                    <div class="checkout-payment">
+                                        <div class="checkout-btn">
+                                            <button type="submit">Place Order</button>
+                                        </div>
                                     </div>
-                                    <div class="col-md-6">
-                                        <label>E-mail</label>
-                                        <input class="form-control" type="text" placeholder="E-mail">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label>Mobile No</label>
-                                        <input class="form-control" type="text" placeholder="Mobile No">
-                                    </div>
-                                    <div class="col-md-12">
-                                        <label>Address</label>
-                                        <input class="form-control" type="text" placeholder="Address">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label>Country</label>
-                                        <select class="custom-select">
-                                            <option selected>United States</option>
-                                            <option>Afghanistan</option>
-                                            <option>Albania</option>
-                                            <option>Algeria</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label>City</label>
-                                        <input class="form-control" type="text" placeholder="City">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label>State</label>
-                                        <input class="form-control" type="text" placeholder="State">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label>ZIP Code</label>
-                                        <input class="form-control" type="text" placeholder="ZIP Code">
-                                    </div>
-                                </div>
+                                    {% endif %}
+                                </form>
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-4">
                         <div class="checkout-inner">
+                            
                             <div class="checkout-summary">
                                 <h1>Cart Total</h1>
-                                <p>Product Name<span>$99</span></p>
-                                <p class="sub-total">Sub Total<span>$99</span></p>
-                                <p class="ship-cost">Shipping Cost<span>$1</span></p>
-                                <h2>Grand Total<span>$100</span></h2>
+                                {% for each in cart_product %}
+                                <p><strong>{{each.items.name}}<span>Rs.{{each.total}}</span></strong></p>
+                                {% endfor %}
+                                <p class="sub-total">Sub Total<span>Rs.{{total_price}}</span></p>
+                                <p class="ship-cost">Shipping Cost<span>Rs.{{shipping}}</span></p>
+                                <h2>Grand Total<span>Rs.{{grand_total}}</span></h2>
                             </div>
-
+                            
                             <div class="checkout-payment">
                                 <div class="payment-methods">
                                     <h1>Payment Methods</h1>
@@ -196,9 +149,9 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="checkout-btn">
-                                    <button>Place Order</button>
-                                </div>
+                                {% comment %} <div class="checkout-btn">
+                                    <button type="submit">Place Order</button>
+                                </div> {% endcomment %}
                             </div>
                         </div>
                     </div>
