@@ -10,7 +10,7 @@ from django.contrib import messages
 
 class BaseView(View):
     views = {}
-
+    # views['cart_count'] = Cart.objects.filter().count()
 
 class HomeView(BaseView):
     def get(self, request):
@@ -175,6 +175,7 @@ class CartView(BaseView):
     def get(self, request):
         user = request.user.username
         carts = Cart.objects.filter(username= user, checkout= False)
+        self.views['cart_count'] = Cart.objects.filter(username=user, checkout=False).count()
         self.views['cart_product'] = carts
         totals = 0
         shipping_cost = 100
@@ -187,7 +188,6 @@ class CartView(BaseView):
         else:
             self.views['grand_total'] = totals + shipping_cost
         self.views['shipping'] = shipping_cost
-        self.views['cart_count'] = Cart.objects.filter(username=user, checkout=False).count()
         return render(request, 'cart.html', self.views)
 
 
@@ -235,7 +235,8 @@ def checkout(request):
                 city = city,
             )
             data.save()
-            return redirect('/')
+            Cart.objects.all().delete()
+            return render(request, 'index.html')
         else:
             messages.error(request, 'Field must not be empty')
             return redirect('home:checkouts')

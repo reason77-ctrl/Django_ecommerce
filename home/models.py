@@ -108,7 +108,6 @@ class Cart(models.Model):
     total = models.IntegerField(default=0)
     all_total = models.IntegerField(default=0)
     checkout = models.BooleanField(default=False)
-    # shipping_cost = models.PositiveIntegerField(default=100, validators=[MinValueValidator(0)], null=False)
 
     def __str__(self):
         return self.username
