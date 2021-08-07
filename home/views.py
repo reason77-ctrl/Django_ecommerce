@@ -175,7 +175,7 @@ class CartView(BaseView):
     def get(self, request):
         user = request.user.username
         carts = Cart.objects.filter(username= user, checkout= False)
-        self.views['cart_count'] = Cart.objects.filter(username=user, checkout=False).count()
+        self.views['cart_count'] = carts.count()
         self.views['cart_product'] = carts
         totals = 0
         shipping_cost = 100
@@ -236,7 +236,7 @@ def checkout(request):
             )
             data.save()
             Cart.objects.all().delete()
-            return render(request, 'index.html')
+            return redirect('/')
         else:
             messages.error(request, 'Field must not be empty')
             return redirect('home:checkouts')
@@ -262,25 +262,25 @@ class CheckoutView(BaseView):
 
 
 # # ------------------------------------------------API----------------------------------------------------
-# from .serializers import *
-# from django.contrib.auth.models import User
-# from .serializers import ItemSerializer
-# from rest_framework import generics
-# from rest_framework.filters import OrderingFilter,SearchFilter
-# from django_filters.rest_framework import DjangoFilterBackend
-#
-# # ViewSets define the view behavior.
-#
-# class ItemViewSet(viewsets.ModelViewSet):
-#     queryset = Item.objects.all()
-#     serializer_class = ItemSerializer
-#
-#
-#
-# class ItemListView(generics.ListAPIView):
-#     queryset = Item.objects.all()
-#     serializer_class = ItemSerializer
-#     filter_backends = [DjangoFilterBackend,OrderingFilter,SearchFilter]
-#     filter_fields = ["id", "category", "label", "brand"]
-#     ordering_field = ["id", "price", "name"]
-#     search_fields = ["name","discription"]
+from .serializers import *
+from django.contrib.auth.models import User
+from .serializers import ItemSerializer
+from rest_framework import generics
+from rest_framework.filters import OrderingFilter,SearchFilter
+from django_filters.rest_framework import DjangoFilterBackend
+
+# ViewSets define the view behavior.
+
+class ItemViewSet(viewsets.ModelViewSet):
+    queryset = Item.objects.all()
+    serializer_class = ItemSerializer
+
+
+
+class ItemListView(generics.ListAPIView):
+    queryset = Item.objects.all()
+    serializer_class = ItemSerializer
+    filter_backends = [DjangoFilterBackend,OrderingFilter,SearchFilter]
+    filter_fields = ["id", "category", "label", "brand"]
+    ordering_field = ["id", "price", "name"]
+    search_fields = ["name","discription"]
